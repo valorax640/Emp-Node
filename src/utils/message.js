@@ -18,22 +18,7 @@ export const ERROR_MESSAGES = {
     USER_NOT_FOUND: 'User not found',
     TOKEN_EXPIRED: 'Token expired',
     INVALID_TOKEN: 'Invalid token',
-    EMAIL_ALREADY_EXISTS: 'Email already exists'
-};
-
-export const VALIDATION_MESSAGES = {
-    EMAIL_REQUIRED: 'Email is required',
-    EMAIL_INVALID: 'Email format is invalid',
-    PASSWORD_REQUIRED: 'Password is required',
-    PASSWORD_MIN: 'Password must be at least 6 characters',
-    FIRST_NAME_REQUIRED: 'First name is required',
-    FIRST_NAME_MIN: 'First name must be at least 2 characters',
-    FIRST_NAME_MAX: 'First name must be at most 50 characters',
-    LAST_NAME_REQUIRED: 'Last name is required',
-    LAST_NAME_MIN: 'Last name must be at least 2 characters',
-    LAST_NAME_MAX: 'Last name must be at most 50 characters',
-    
-    DEPARTMENT_NAME_REQUIRED: 'Department name is required',
-    DEPARTMENT_NAME_MIN: 'Department name must be at least 2 characters',
-    DEPARTMENT_NAME_MAX: 'Department name must be at most 100 characters'
+    EMAIL_ALREADY_EXISTS: 'Email already exists',
+    MOBILE_ALREADY_EXISTS: 'Mobile number already exists',
+    DUPLICATE_ENTRY: 'Duplicate entry not allowed',
 };

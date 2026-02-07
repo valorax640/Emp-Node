@@ -10,11 +10,11 @@ export const getDepartments = async (req, res) => {
     }
 };
 
-export const createDepartment = async (department, manager_id) => {
+export const createDepartment = async (department, is_active, manager_id) => {
     try {
         const [result] = await pool.query(
-            'INSERT INTO department_master (department, manager_id) VALUES (?, ?)',
-            [department, manager_id]
+            'INSERT INTO department_master (department, is_active, manager_id) VALUES (?, ?, ?)',
+            [department, is_active, manager_id]
         );
         return result.insertId;
     } catch (error) {
@@ -44,6 +44,22 @@ export const getDepartmentById = async (id) => {
         return rows[0];
     } catch (error) {
         console.error('Error fetching department by ID:', error);
+        throw error;
+    }
+};
+
+export const checkDepartmentExists = async (department, excludeId = null) => {
+    try {
+        let query = 'SELECT COUNT(*) AS count FROM department_master WHERE department = ?';
+        const params = [department];
+        if (excludeId) {
+            query += ' AND id != ?';
+            params.push(excludeId);
+        }
+        const [rows] = await pool.query(query, params);
+        return rows[0].count > 0;
+    } catch (error) {
+        console.error('Error checking department existence:', error);
         throw error;
     }
 };

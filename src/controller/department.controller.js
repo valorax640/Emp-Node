@@ -1,5 +1,5 @@
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../utils/message.js";
-import { createDepartment, getDepartments, updateDepartment, getDepartmentById } from "../model/department.model.js";
+import { createDepartment, getDepartments, updateDepartment, getDepartmentById, checkDepartmentExists } from "../model/department.model.js";
 import { departmentSchema } from "../validation/department.validation.js";
 
 export const listDepartments = async (req, res) => {
@@ -32,13 +32,29 @@ export const departmentAction = async (req, res) => {
     }
     try {
         if (!id) {
-            const departmentId = await createDepartment(department, manager_id);
+            const exists = await checkDepartmentExists(department);
+            if (exists) {
+                return res.status(400).json({
+                    status: false,
+                    message: ERROR_MESSAGES.DUPLICATE_ENTRY,
+                    data: {}
+                });
+            }
+            const departmentId = await createDepartment(department, is_active, manager_id);
             res.status(201).json({
                 status: true,
                 message: SUCCESS_MESSAGES.DATA_CREATED,
                 data: { departmentId }
             });
         } else {
+            const exists = await checkDepartmentExists(department, id);
+            if (exists) {
+                return res.status(400).json({
+                    status: false,
+                    message: ERROR_MESSAGES.DUPLICATE_ENTRY,
+                    data: {}
+                });
+            }
             const result = await updateDepartment(id, department, is_active, manager_id);
             if (result) {
                 res.status(200).json({
