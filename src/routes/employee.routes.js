@@ -1,9 +1,9 @@
 import express from 'express';
 import { getEmployees, employeeAction ,getEmployeeDetails} from '../controller/employee.controller.js';
-import { decodeToken } from '../middleware/decodetoken.js';
+import { verifyToken } from '../middleware/verifyToken.js';
 
 const employeeRoutes = express.Router();
-employeeRoutes.use(decodeToken);
+employeeRoutes.use(verifyToken);
 
 employeeRoutes.get('/get-all-employees', getEmployees);
 employeeRoutes.post('/employee-action', employeeAction);

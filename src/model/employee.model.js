@@ -33,9 +33,10 @@ export const createEmployee = async (first_name, last_name, email, mobile, addre
             'INSERT INTO user_master (first_name, last_name, email,password, role_id ) VALUES (?, ?, ?,?,2)',
             [first_name, last_name, email, hashedPassword]
         );
+        const userId = user_result.insertId;
         const [result] = await connection.query(
-            'INSERT INTO employee_master (first_name, last_name, email, mobile, address, department_id) VALUES (?, ?, ?, ?, ?, ?)',
-            [first_name, last_name, email, mobile, address, department_id]
+            'INSERT INTO employee_master (first_name, last_name, email, mobile, address, department_id, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [first_name, last_name, email, mobile, address, department_id, userId]
         );
         await connection.commit();
         return result.insertId;

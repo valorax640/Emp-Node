@@ -2,7 +2,18 @@ import pool from "../config/db.js";
 
 export const getDepartments = async (req, res) => {
     try {
-        const [rows] = await pool.query("SELECT * FROM department_master WHERE is_active = '1'");
+        const [rows] = await pool.query(`
+            SELECT 
+	            d.id AS department_id,
+	            d.department,
+                d.is_active,
+                d.manager_id,
+                CONCAT(e.first_name, ' ', e.last_name) AS manager_name
+            FROM department_master AS d 
+            LEFT JOIN employee_master AS e 
+            ON d.manager_id = e.id 
+            WHERE is_active = '1'
+        `);
         return rows;
     } catch (error) {
         console.error('Error fetching departments:', error);
