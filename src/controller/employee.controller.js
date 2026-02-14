@@ -1,5 +1,5 @@
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../utils/message.js';
-import { getAllEmployees, createEmployee, updateEmployee, getEmployeeById, checkEmailExists, checkMobileExists } from "../model/employee.model.js";
+import { getAllEmployees, createEmployee, updateEmployee, getEmployeeById, checkEmailExists, checkMobileExists, employeeByDepartment, employeePagination } from "../model/employee.model.js";
 import { employeeSchema } from "../validation/employee.validation.js";
 
 export const getEmployees = async (req, res) => {
@@ -111,6 +111,44 @@ export const getEmployeeDetails = async (req, res) => {
         }
     } catch (error) {
         console.error('Error fetching employee details:', error);
+        res.status(500).json({
+            status: false,
+            message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+            data: {}
+        });
+    }
+};
+
+export const getEmployeesByDepartment = async (req, res) => {
+    const { department_id } = req.params;
+    try {
+        const employees = await employeeByDepartment(department_id);
+        res.status(200).json({
+            status: true,
+            message: SUCCESS_MESSAGES.DATA_FETCH_SUCCESS,
+            data: employees
+        });
+    } catch (error) {
+        console.error('Error fetching employees by department:', error);
+        res.status(500).json({
+            status: false,
+            message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+            data: {}
+        });
+    }
+};
+
+export const getEmployeesWithPagination = async (req, res) => {
+    const { page = 1, limit = 10, search = '' } = req.query;
+    try {
+        const employees = await employeePagination(parseInt(page), parseInt(limit), `%${search}%`);
+        res.status(200).json({
+            status: true,
+            message: SUCCESS_MESSAGES.DATA_FETCH_SUCCESS,
+            data: employees
+        });
+    } catch (error) {
+        console.error('Error fetching employees with pagination:', error);
         res.status(500).json({
             status: false,
             message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
